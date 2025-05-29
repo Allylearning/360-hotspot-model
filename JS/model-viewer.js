@@ -239,7 +239,7 @@ AFRAME.registerComponent('model-viewer', {
 
     modelPivotEl.appendChild(modelEl);
 
-    // Example hotspot label entity with popup on click
+    // Example hotspot label entity with popup on click (external HTML popup)
     var hotspotEl = document.createElement('a-entity');
     hotspotEl.setAttribute('position', '0 0 0.4');
     hotspotEl.setAttribute('look-at', '[camera]');
@@ -253,27 +253,13 @@ AFRAME.registerComponent('model-viewer', {
       popup.setAttribute('id', 'hotspotPopup');
       popup.setAttribute('position', '0 1.5 -1');
       popup.setAttribute('look-at', '[camera]');
-
-      const bg = document.createElement('a-plane');
-      bg.setAttribute('width', '2.5');
-      bg.setAttribute('height', '1');
-      bg.setAttribute('color', '#111');
-      bg.setAttribute('material', 'shader: flat');
-      popup.appendChild(bg);
-
-      const popupText = document.createElement('a-text');
-      popupText.setAttribute('value', 'The left atrium receives oxygen-rich blood from the lungs.');
-      popupText.setAttribute('color', '#fff');
-      popupText.setAttribute('align', 'center');
-      popupText.setAttribute('width', '2.2');
-      popupText.setAttribute('position', '0 0 0.01');
-      popup.appendChild(popupText);
+      popup.setAttribute('info-message', 'htmlSrc: #leftAtriumHTML');
 
       document.querySelector('a-scene').appendChild(popup);
 
       setTimeout(() => {
         popup.parentNode && popup.parentNode.removeChild(popup);
-      }, 5000);
+      }, 6000);
     });
 
     var planeEl = document.createElement('a-plane');
