@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>The Anatomy of the Human Heart</title>
+  <meta name="description" content="Model Viewer (VR / AR) • A-Frame">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <!-- Load A-Frame library first -->
+  <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+
+  <!-- Then load A-Frame components and custom scripts -->
+  <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+  <script src="JS/aframe-master.js"></script>
+  <script src="JS/info-message.js"></script>
+  <script src="JS/animation-mixer.js"></script>
+  <script src="JS/ar-shadows.js"></script>
+  <script src="JS/model-viewer.js"></script>
+  <script src="JS/background-gradient.js"></script>
+
+  <link rel="stylesheet" href="Assets/Satoshi_Complete/Fonts/WEB/css/satoshi.css">
+</head>
+<body>
+
+<a-scene
+  renderer="colorManagement: true;"
+  info-message="htmlSrc: #messageText"
+  model-viewer="gltfModel: #humanheart; title: Human Heart"
+  xr-mode-ui="XRMode: xr">
+  <a-assets timeout="1000">
+    <a-asset-item id="humanheart"
+      src="https://cdn.glitch.global/4902f35a-fece-43ac-bc0c-52116201cd75/humanheart.glb?v=1748437993207"
+      response-type="arraybuffer"></a-asset-item>
+
+    <img id="shadow" src="Assets/shadow.png">
+    <a-asset-item id="messageText" src="HTML/message.html"></a-asset-item>
+  </a-assets>
+</a-scene>
+</body>
+</html>
