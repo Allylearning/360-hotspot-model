@@ -151,8 +151,6 @@ AFRAME.registerComponent('model-viewer', {
     var rightHandEl = this.rightHandEl = document.createElement('a-entity');
     var leftHandEl = this.leftHandEl = document.createElement('a-entity');
 
-    cameraEl.setAttribute('id', 'camera');
-
     cameraEl.setAttribute('camera', {fov: 60});
     cameraEl.setAttribute('cursor', {
       rayOrigin: 'mouse'
@@ -241,59 +239,6 @@ AFRAME.registerComponent('model-viewer', {
 
     modelPivotEl.appendChild(modelEl);
 
-    // Example hotspot label entity with popup on click (external HTML popup)
-    var hotspotEl = document.createElement('a-entity');
-    hotspotEl.setAttribute('position', '0 0 0.4');
-    hotspotEl.setAttribute('look-at', '#camera');
-    hotspotEl.setAttribute('class', 'raycastable');
-    hotspotEl.setAttribute('id', 'leftAtriumHotspot');
-    hotspotEl.addEventListener('click', function () {
-      const existing = document.querySelector('#hotspotPopup');
-      if (existing) existing.parentNode.removeChild(existing);
-
-      const popup = document.createElement('a-entity');
-      popup.setAttribute('id', 'hotspotPopup');
-      popup.setAttribute('position', '0 1.5 -1');
-      popup.setAttribute('look-at', '#camera');
-      popup.setAttribute('info-message', 'htmlSrc: #leftAtriumHTML');
-
-      document.querySelector('a-scene').appendChild(popup);
-
-      setTimeout(() => {
-        popup.parentNode && popup.parentNode.removeChild(popup);
-      }, 6000);
-    });
-
-    var planeEl = document.createElement('a-plane');
-    planeEl.setAttribute('color', '#fff');
-    planeEl.setAttribute('width', '0.1');
-    planeEl.setAttribute('height', '0.1');
-    planeEl.setAttribute('material', 'shader: flat');
-
-    var textEl = document.createElement('a-text');
-    textEl.setAttribute('value', '+');
-    textEl.setAttribute('color', 'blue');
-    textEl.setAttribute('align', 'center');
-    textEl.setAttribute('width', '3');
-    textEl.setAttribute('position', '0 0 0.01');
-
-    hotspotEl.appendChild(planeEl);
-    hotspotEl.appendChild(textEl);
-
-    modelPivotEl.appendChild(hotspotEl);
-
-    shadowEl.setAttribute('rotation', '-90 -30 0');
-    shadowEl.setAttribute('geometry', 'primitive: plane; width: 1.0; height: 1.0');
-    shadowEl.setAttribute('material', 'src: #shadow; transparent: true; opacity: 0.40');
-    shadowEl.setAttribute('hide-on-enter-ar', '');
-
-    modelPivotEl.appendChild(shadowEl);
-
-    arShadowEl.setAttribute('rotation', '-90 0 0');
-    arShadowEl.setAttribute('geometry', 'primitive: plane; width: 30.0; height: 30.0');
-    arShadowEl.setAttribute('shadow', 'receive: true');
-    arShadowEl.setAttribute('ar-shadows', 'opacity: 0.2');
-    arShadowEl.setAttribute('visible', 'false');
 
     this.el.addEventListener('ar-hit-test-select-start', function () {
       arShadowEl.object3D.visible = false;
