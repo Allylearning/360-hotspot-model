@@ -151,6 +151,8 @@ AFRAME.registerComponent('model-viewer', {
     var rightHandEl = this.rightHandEl = document.createElement('a-entity');
     var leftHandEl = this.leftHandEl = document.createElement('a-entity');
 
+    cameraEl.setAttribute('id', 'camera');
+
     cameraEl.setAttribute('camera', {fov: 60});
     cameraEl.setAttribute('cursor', {
       rayOrigin: 'mouse'
@@ -242,7 +244,7 @@ AFRAME.registerComponent('model-viewer', {
     // Example hotspot label entity with popup on click (external HTML popup)
     var hotspotEl = document.createElement('a-entity');
     hotspotEl.setAttribute('position', '0 0 0.4');
-    hotspotEl.setAttribute('look-at', '[camera]');
+    hotspotEl.setAttribute('look-at', '#camera');
     hotspotEl.setAttribute('class', 'raycastable');
     hotspotEl.setAttribute('id', 'leftAtriumHotspot');
     hotspotEl.addEventListener('click', function () {
@@ -252,7 +254,7 @@ AFRAME.registerComponent('model-viewer', {
       const popup = document.createElement('a-entity');
       popup.setAttribute('id', 'hotspotPopup');
       popup.setAttribute('position', '0 1.5 -1');
-      popup.setAttribute('look-at', '[camera]');
+      popup.setAttribute('look-at', '#camera');
       popup.setAttribute('info-message', 'htmlSrc: #leftAtriumHTML');
 
       document.querySelector('a-scene').appendChild(popup);
