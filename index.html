@@ -43,7 +43,7 @@
       background-color: #f2f3f6;
       border: 3px solid #0038b9;
     }
-    .hotspot:visited {
+    .hotspot.visited {
       background-color: #959595;
       border: 3px solid #fff;
     }
@@ -107,20 +107,47 @@
     font-family: 'Satoshi', sans-serif;
     font-weight: bold;
     cursor: pointer;
+    font-size: 17px;
   }
   .popup-content button:hover {
     background: #0038b9;
+  }
+  @media (max-width: 768px) {
+    .hotspot {
+      width: 45px;
+      height: 45px;
+      border-width: 4px;
+    }
+
+    .popup-content {
+      max-width: 90%;
+      padding: 1.5rem;
+      font-size: 18px;
+    }
+
+    .popup-content button {
+      font-size: 18px;
+      padding: 0.75rem;
+    }
+
+    #popup-title {
+      font-size: 20px;
+    }
+
+    #popup-text {
+      font-size: 16px;
+    }
   }
   </style>
 </head>
 <body>
 
   <model-viewer src="Assets/humanheart.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls tone-mapping="neutral" poster="poster.webp" shadow-intensity="1">
-    <button class="hotspot" slot="hotspot-1" data-position="0.01801302150605885m 0.0365122351155331m 0.006972596897889191m" data-normal="0.792075952802983m 0.2111108644708924m 0.5727546489497916m" data-visibility-attribute="visible" data-popup-title="Left Ventricle" data-popup-text="The left ventricle pumps oxygenated blood to the body.">
+    <button class="hotspot" slot="hotspot-1" data-position="0.01801302150605885m 0.0365122351155331m 0.006972596897889191m" data-normal="0.792075952802983m 0.2111108644708924m 0.5727546489497916m" data-visibility-attribute="visible" data-popup-title="Left Ventricle" data-popup-text="The left ventricle pumps oxygenated blood to the body." data-orbit="80deg 75deg 0.5m" data-target="0m 0.03m 0m">
         <div class="annotation">Left Ventricle</div>
-    </button><button class="hotspot" slot="hotspot-2" data-position="-0.010678007883929176m 0.07001365986600923m -0.004119234755516232m" data-normal="-0.3486263756843119m -0.1313951678241931m -0.9280059051803892m" data-visibility-attribute="visible" data-popup-title="Right Atrium" data-popup-text="The right atrium receives deoxygenated blood from the body.">
+    </button><button class="hotspot" slot="hotspot-2" data-position="-0.010678007883929176m 0.07001365986600923m -0.004119234755516232m" data-normal="-0.3486263756843119m -0.1313951678241931m -0.9280059051803892m" data-visibility-attribute="visible" data-popup-title="Right Atrium" data-popup-text="The right atrium receives deoxygenated blood from the body." data-orbit="220deg 65deg 0.6m" data-target="0m 0.07m 0m">
         <div class="annotation">Right Atrium</div>
-    </button><button class="hotspot" slot="hotspot-3" data-position="-0.010252632512553065m 0.04365609386169948m 0.01921930835916992m" data-normal="-0.11355056108727336m 0.41306971681137306m 0.9035926511045438m" data-visibility-attribute="visible" data-popup-title="Aorta" data-popup-text="The aorta carries oxygen-rich blood from the heart to the rest of the body.">
+    </button><button class="hotspot" slot="hotspot-3" data-position="-0.010252632512553065m 0.04365609386169948m 0.01921930835916992m" data-normal="-0.11355056108727336m 0.41306971681137306m 0.9035926511045438m" data-visibility-attribute="visible" data-popup-title="Aorta" data-popup-text="The aorta carries oxygen-rich blood from the heart to the rest of the body." data-orbit="320deg 90deg 0.55m" data-target="0m 0.04m 0m">
         <div class="annotation">Aorta</div>
     </button>
     <div class="progress-bar hide" slot="progress-bar">
@@ -143,16 +170,44 @@
 </div>
 
 <script>
-  document.querySelectorAll('button.hotspot').forEach((hotspot) => {
-    hotspot.addEventListener('click', () => {
-      const popup = document.getElementById('popup');
-      const popupText = hotspot.getAttribute('data-popup-text') || '';
-      const popupTitle = hotspot.getAttribute('data-popup-title') || '';
-      document.getElementById('popup-text').textContent = popupText;
-      document.getElementById('popup-title').textContent = popupTitle;
-      popup.style.display = 'flex';
-    });
+// Clear visited state on every page load
+localStorage.removeItem('visitedHotspots');
+const visitedHotspots = JSON.parse(localStorage.getItem('visitedHotspots') || '[]');
+
+const modelViewer = document.querySelector('model-viewer');
+
+const focusCameraOnHotspot = (hotspot) => {
+  const orbit = hotspot.dataset.orbit;
+  const target = hotspot.dataset.target;
+  if (orbit && target) {
+    modelViewer.cameraOrbit = orbit;
+    modelViewer.cameraTarget = target;
+  }
+};
+
+document.querySelectorAll('button.hotspot').forEach((hotspot) => {
+  const id = hotspot.getAttribute('slot');
+  if (visitedHotspots.includes(id)) {
+    hotspot.classList.add('visited');
+  }
+
+  hotspot.addEventListener('click', () => {
+    focusCameraOnHotspot(hotspot);
+
+    const popup = document.getElementById('popup');
+    const popupText = hotspot.getAttribute('data-popup-text') || '';
+    const popupTitle = hotspot.getAttribute('data-popup-title') || '';
+    document.getElementById('popup-text').textContent = popupText;
+    document.getElementById('popup-title').textContent = popupTitle;
+    popup.style.display = 'flex';
+
+    if (id && !visitedHotspots.includes(id)) {
+      visitedHotspots.push(id);
+      localStorage.setItem('visitedHotspots', JSON.stringify(visitedHotspots));
+      hotspot.classList.add('visited');
+    }
   });
+});
 </script>
 
 </body>
