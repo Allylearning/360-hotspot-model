@@ -113,6 +113,7 @@
     background: #0038b9;
   }
   #ar-button {
+    display: none;
     position: absolute;
     bottom: 1rem;
     right: 1rem;
@@ -134,7 +135,7 @@
   @media (max-width: 768px) {
     model-viewer {
       width: 100%;
-      height: 100vh;
+      height: 95vh;
     }
   .hotspot {
     width: 40px;
@@ -239,6 +240,15 @@ document.querySelectorAll('button.hotspot').forEach((hotspot) => {
 modelViewer.addEventListener('ar-status', (event) => {
   console.log('AR status changed:', event.detail.status);
   // Optional: handle visibility toggles for hotspots here
+});
+// Check AR support and show/hide AR button when model-viewer is ready
+modelViewer.addEventListener('load', () => {
+  const arButton = document.getElementById('ar-button');
+  if (modelViewer.canActivateAR) {
+    arButton.style.display = 'block';
+  } else {
+    arButton.style.display = 'none';
+  }
 });
 </script>
 
